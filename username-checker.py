@@ -1,4 +1,3 @@
-#import urllib2
 import urllib.request as urllib2
 import sys
 # define ANSI escape sequences for colored output
@@ -68,6 +67,6 @@ print(bcolors.HEADER + ("Checking for availability of '"+username+"', please wai
 facebook(username)
 twitter(username)
 instagram(username)
-medium(username)
 github(username)
-bitbucket(username)
+#medium(username)
+#bitbucket(username)
