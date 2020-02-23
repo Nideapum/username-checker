@@ -1,4 +1,5 @@
-import urllib2
+#import urllib2
+import urllib.request as urllib2
 import sys
 # define ANSI escape sequences for colored output
 class bcolors:
@@ -47,28 +48,23 @@ def middleware(request, username):
         response = urllib2.urlopen(request)
     except urllib2.HTTPError as e:
         if e.code == 404:
-            return (404, "Available")
+            return (e.code, bcolors.OKGREEN, "Available")
         else:
-            return (e.code, e.reason)
+            return (e.code, bcolors.WARNING, e.reason)
     else:
         if response.getcode() == 200:
-            return (200, "Already exists")
+            return (response.getcode(), bcolors.FAIL, "Already exists")
 
 # used for generating colored responses
 def parse(request, username):
     response = middleware(request, username)
-    if response[0] == 200:
-        # printout(response, RED)
-        print(bcolors.FAIL + request.get_full_url() + ": 200: Already Exists" + bcolors.ENDC)
-    elif response[0] == 404:
-        # printout(response, GREEN)
-        print(bcolors.OKGREEN + request.get_full_url() + ": 404: Available" + bcolors.ENDC)
+    print(response[1] + request.get_full_url()+" ["+str(response[0])+"] "+response[2]+bcolors.ENDC);
 
 # ask for a username, instead of an argument
 # username = raw_input("Username to check: ")
 # take username as a system argument
 username = sys.argv[1]
-print("Checking for availability of '" + username + "', please wait...")
+print(bcolors.HEADER + ("Checking for availability of '"+username+"', please wait...") + bcolors.ENDC);
 facebook(username)
 twitter(username)
 instagram(username)
